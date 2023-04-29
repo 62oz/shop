@@ -3,10 +3,10 @@ class ProductsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
 
-
   # GET /products or /products.json
   def index
     @products = Product.all.order("created_at desc")
+    @cart = helpers.current_cart
   end
 
   # GET /products/1 or /products/1.json
@@ -57,6 +57,11 @@ class ProductsController < ApplicationController
 
  # DELETE /products/1 or /products/1.json
 def destroy
+  @product.destroy
+  respond_to do |format|
+    format.html { redirect_to products_url, notice: "Product was successfully destroyed." }
+    format.json { head :no_content }
+  end
 end
 
 private

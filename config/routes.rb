@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  resources :cart, only: [:index, :show, :destroy] do
+    collection do
+      delete 'empty'
+    end
+    resources :line_items, only: [:show, :create, :update, :destroy], shallow: true
+    delete 'line_items/:id' => 'line_items#destroy', as: :line_item
+  end
+
   resources :products
   devise_for :users, controllers: {
     registrations: 'registrations'
